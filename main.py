@@ -1,32 +1,36 @@
-"""Rover entry point. Run a hardware-free demo: python main.py --demo."""
+
+"""Rover entry point. Run with real hardware by default."""
 
 import argparse
 from contextlib import ExitStack
 
 from buzzer import Buzzer
 from controller import RoverController
-from lcd_display import LCDDisplay
-from motor_driver import MotorDriver
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--demo", action="store_true", required=True,
-                        help="Run the module demonstration without GPIO access")
-    parser.parse_args()
+    parser.add_argument(
+        "--demo",
+        action="store_true",
+        help="Run without accessing GPIO hardware"
+    )
+    args = parser.parse_args()
 
-    # Register cleanup immediately after each device initializes. ExitStack
-    # attempts all callbacks even when initialization or another callback fails.
+    # Default: real hardware
+    demo = args.demo
+
     with ExitStack() as cleanup:
-        display = LCDDisplay(demo=True)
-        cleanup.callback(display.close)
-        buzzer = Buzzer(demo=True)
+        buzzer = Buzzer(demo=demo)
         cleanup.callback(buzzer.close)
-        motors = MotorDriver(demo=True)
-        cleanup.callback(motors.close)
-        controller = RoverController(motors, buzzer, display)
+
+        controller = RoverController(buzzer)
+
         try:
-            controller.run_demo()
+            if demo:
+                controller.run_demo()
+            else:
+                controller.run()
         except KeyboardInterrupt:
             print("Stopping rover.")
 

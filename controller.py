@@ -1,18 +1,20 @@
-"""Coordinates devices. The rover decision algorithm is not yet defined."""
-
+"""Coordinates buzzer behavior."""
 
 class RoverController:
-    def __init__(self, motors, buzzer, display):
-        self.motors = motors
+    def __init__(self, buzzer):
         self.buzzer = buzzer
-        self.display = display
 
     def run(self):
-        raise NotImplementedError("Define rover behavior and command input before implementation.")
+        """Play an example melody using the configured buzzer mode."""
+        self.buzzer.playingSound([
+            (440, 0.3),
+            (494, 0.3),
+            (523, 0.6),
+            (0, 0.2),
+            (523, 0.3),
+            (440, 0.6),
+        ])
 
     def run_demo(self):
-        """Device smoke demonstration, not the rover operating algorithm."""
-        self.motors.stop()
-        for status in ("Detected", "Clean", "Moving"):
-            self.display.show_status(status)
-        print("[DEMO] Structure ready; no autonomous algorithm configured.")
+        """Simulate the same melody when main constructs a demo buzzer."""
+        self.run()
