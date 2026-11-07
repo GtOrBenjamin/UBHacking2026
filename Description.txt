@@ -1,0 +1,48 @@
+MÔ TẢ CẤU TẠO ROVER
+
+
+
+1. Bộ điều khiển trung tâm
+- Raspberry Pi 4.
+- Số GPIO trong code và tài liệu là BCM, không phải số chân vật lý.
+
+2. Hệ thống di chuyển
+- Rover có 4 bánh xe.
+- Module L298N gồm 2 kênh điều khiển bên trái và bên phải.
+- IN1/IN2 điều khiển chiều quay bên trái; IN3/IN4 điều khiển bên phải.
+- Theo mô tả được cung cấp: IN1 chiều xuôi, IN2 chiều ngược bên trái;
+  IN3 chiều xuôi, IN4 chiều ngược bên phải.
+- Mức logic được mô tả: HIGH 3,3 V, LOW 0 V.
+- ENA và ENB vẫn được sử dụng để điều chỉnh tốc độ bằng PWM từ Pi.
+- Có 4 motor tổng cộng: 2 motor bên trái và 2 motor bên phải.
+- Kênh A của L298N (IN1/IN2, ENA) điều khiển chung 2 motor bên trái.
+- Kênh B của L298N (IN3/IN4, ENB) điều khiển chung 2 motor bên phải.
+- Hai motor cùng bên nhận chung lệnh chiều quay và PWM; phần mềm không
+  điều khiển riêng từng motor trong cùng một bên.
+
+Kết nối Pi -> L298N đã được người dùng xác nhận:
+  L298N   GPIO BCM   Chân vật lý Pi   Vai trò
+  IN1     17         11               Chiều quay bên trái
+  IN2     27         13               Chiều quay bên trái
+  IN3     22         15               Chiều quay bên phải
+  IN4     23         16               Chiều quay bên phải
+  ENA     18         12               PWM bên trái
+  ENB     13         33               PWM bên phải
+
+Yêu cầu đấu nối theo cấu hình code:
+- Tháo jumper ENA/ENB khi điều khiển hai chân này bằng GPIO.
+- Nối chung GND Raspberry Pi và GND L298N.
+- Chưa xác nhận thực tế đã thực hiện các yêu cầu đấu nối trên.
+- Chiều tiến thực tế phụ thuộc cách đấu dây/lắp motor; chưa chạy kiểm chứng.
+
+4. Buzzer piezo
+- Người dùng xác nhận điều khiển bằng PWM.
+- Chưa xác nhận GPIO BCM, model, điện áp/dòng định mức và mạch đấu nối.
+GPIO12
+- Chưa xác định thời điểm kêu, tần số âm hoặc mẫu tiếng báo.
+- Chưa tích hợp buzzer vào code hiện tại.
+
+5. Màn hình LCD
+- Mô tả ban đầu ghi các trạng thái: Detected / Clean / Moving.
+- LCD 1602, Hãy để PIN là một placeholder (khác với những pin đã được sử dụng)
+
