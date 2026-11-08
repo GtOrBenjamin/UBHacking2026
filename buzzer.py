@@ -32,7 +32,7 @@ class Buzzer:
         else:
             self._device.value = 0
             self._device.frequency = frequency
-            self._device.value = 0.5
+            self._device.value = 0.25
             print(f"[HARDWARE buzzer] tone {frequency} Hz, duty cycle 50%", flush=True)
         self.frequency = frequency
 
