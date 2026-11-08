@@ -32,10 +32,6 @@ class RoverController:
         """Continuously show distance readings in the configured mode."""
         self.lcd.writeFirstLine("Rover ready")
         self.lcd.writeSecondLine("Reading distance")
-        try:
-            curses.wrapper(self.WASD)
-        finally:
-            self.stop()
 
 
     def close(self):
@@ -70,27 +66,4 @@ class RoverController:
         """Run distance reporting using the demo sensor."""
         self.run()
 
-    def WASD(self, stdscr):
-        stdscr.keypad(True)
-        stdscr.timeout(100)
-
-        while True:
-            key = stdscr.getch()
-
-            if key == ord('w'):
-                self.moveForward(100);
-            elif key == ord('s'):
-                self.moveBackward(100);
-            elif key == ord('a'):
-                self.turnLeft(100);
-            elif key == ord('d'):
-                self.turnRight(100);
-            elif key == curses.KEY_UP:
-                self.moveForward(100);
-            elif key == ord('q'):
-                break
-            else:
-                continue
-
-            stdscr.erase()
-            stdscr.refresh()
+    
