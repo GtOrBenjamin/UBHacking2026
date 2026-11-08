@@ -42,8 +42,8 @@ class RoverController:
             (587, 0.5),
             (523, 1.0),
         ]
-        # self.lcd.writeFirstLine("Rover ready")
-        # self.lcd.writeSecondLine("Playing melody")
+        self.lcd.writeFirstLine("Rover ready")
+        self.lcd.writeSecondLine("Playing melody")
         self.buzzer.playingSound(melody)
         
 
