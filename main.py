@@ -28,7 +28,8 @@ def main():
         buzzer = Buzzer(demo=demo)
         cleanup.callback(buzzer.close)
 
-        controller = RoverController(buzzer, lcd)
+        controller = RoverController(buzzer, lcd, demo=demo)
+        cleanup.callback(controller.close)
 
         try:
             if demo:

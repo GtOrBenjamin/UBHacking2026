@@ -64,4 +64,5 @@ Wiring requirements for the code configuration:
 - Actual LCD text output has not yet been verified on the Raspberry Pi.
 
 5. Distant Sensor 
-- PIN: GPIO26 - Trigger, GPIO19 - Echo
+- PIN: GPIO19 - Trigger, GPIO26 - Echo
+- HCFR04

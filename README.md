@@ -2,6 +2,28 @@
 
 # Rover project
 
+Print ultrasonic distance readings on the Pi every approximately 0.5 seconds:
+
+```sh
+python3 distantsensor.py
+# Or through RoverController (also initializes the LCD and buzzer):
+python3 main.py
+```
+
+Add `--demo` to either command for simulated 100 cm readings without GPIO.
+Press Ctrl+C to stop and release the sensor pins. `distantSensor.readDistance()`
+returns centimeters, or `None` for a missing/stuck echo. Python pulse timing
+is approximate and may be affected by Linux scheduling. Space direct reads
+at least 60 ms apart. The current description specifies Trigger BCM 19 and
+Echo BCM 26. Standard HC-SR04 Echo signals require a voltage divider or level
+shifter before the Pi input. The description's model spelling is `HCFR04`;
+the implementation follows the HC-SR04-style trigger/echo interface indicated
+by the existing scaffold.
+
+The controller constructs its distance sensor and reports readings during
+normal startup. Its existing melody is available through `playMelody()`;
+it does not play automatically during continuous distance reporting.
+
 `main.py` creates a `Buzzer` and `lcdDisplay` and passes them to
 `RoverController` in `controller.py`. The controller shows LCD messages while
 playing the melody. Motor code is retained but temporarily disconnected.
