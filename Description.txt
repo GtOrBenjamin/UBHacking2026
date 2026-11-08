@@ -49,8 +49,19 @@ Wiring requirements for the code configuration:
 
 4. LCD display
 - The initial description lists these statuses: Detected / Clean / Moving.
-- LCD I2C 1602. Leave the pin assignment as a placeholder, separate from pins
-  already in use.
+- LCD1602: 16 columns and 2 rows, connected through I2C bus 1.
+- Backpack chip: PCF8574T, confirmed by the user. The RPLCD driver setting
+  is "PCF8574".
+- I2C address: 0x27, detected by the user's I2C scan.
+- SDA1: BCM GPIO2, physical Pi pin 3.
+- SCL1: BCM GPIO3, physical Pi pin 5.
+- The lcdDisplay class in lcddisplay.py supports writing to either row,
+  clearing either row, and clearing both rows.
+- Demo mode logs LCD operations without accessing hardware. Raspberry Pi
+  mode uses RPLCD and the I2C settings in config.py.
+- main.py creates the display and passes it to controller.py. Cleanup
+  clears the display, turns off the backlight, and closes the I2C bus.
+- Actual LCD text output has not yet been verified on the Raspberry Pi.
 
 5. Distant Sensor 
 - PIN: GPIO26 - Trigger, GPIO19 - Echo

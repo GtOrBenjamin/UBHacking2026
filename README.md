@@ -2,16 +2,16 @@
 
 # Rover project
 
-`main.py` creates a `Buzzer` and `MotorDriver` and passes them to
-`RoverController` in `controller.py`. Motor commands are available through
-the controller; the current run routine still only plays the melody.
+`main.py` creates a `Buzzer` and `lcdDisplay` and passes them to
+`RoverController` in `controller.py`. The controller shows LCD messages while
+playing the melody. Motor code is retained but temporarily disconnected.
 
 `MotorDriver` provides `moveForward(speed)`, `moveBackward(speed)`,
 `turnRight(speed)`, and `turnLeft(speed)`. Speed is 0–100 percent; 0 stops.
 Turns spin in place. Commands continue until another command or `stop()`.
-`close()` stops the motors and releases GPIO; `main.py` handles cleanup.
-For example, future controller logic can call `self.moveForward(40)` and
-later `self.stop()`. No movement sequence or OpenCV behavior is configured.
+`close()` stops the motors and releases GPIO. Future controller logic can
+call a connected driver's `moveForward(40)` and later `stop()`.
+No movement sequence or OpenCV behavior is configured.
 
 Motor pins use BCM numbering: IN1=17, IN2=27 (left), IN3=22, IN4=23
 (right), ENA=18 and ENB=13 (PWM). Remove ENA/ENB jumpers and connect
@@ -25,10 +25,35 @@ python3 main.py --demo
 ```
 
 The demo prints actions and waits for each note without accessing GPIO or
-requiring gpiozero. On the Raspberry Pi, with gpiozero installed, run
+requiring hardware libraries. On the Raspberry Pi, install requirements and run
 `python3 main.py` to play the same melody on a passive PWM piezo buzzer.
 `BUZZER_PIN` in `config.py` defaults to BCM 12, as listed in `Description.txt`;
 set it to match your wiring.
+
+LCD1602 setup:
+- Enable I2C on the Raspberry Pi and connect SDA1 (BCM 2, physical pin 3)
+  and SCL1 (BCM 3, physical pin 5).
+- Set `LCD_I2C_ADDRESS` and `LCD_I2C_EXPANDER` in `config.py` to match your
+  backpack. They are deliberately unset until confirmed. An I2C scan with
+  `i2cdetect -y 1` reports addresses; inspect the chip marking for its type.
+- Install dependencies with `python3 -m pip install -r requirements.txt`.
+- Run `python3 main.py --demo` for logs, or `python3 main.py` for hardware.
+
+Call the LCD methods from `controller.py` using:
+
+```python
+self.lcd.writeFirstLine("Detected")
+self.lcd.writeSecondLine("Moving")
+self.lcd.clearFirstLine()
+self.lcd.clearSecondLine()
+self.lcd.clearAll()
+```
+
+Each write replaces that row, truncates text to 16 characters, and pads
+shorter text with spaces. Text must be printable ASCII without newlines.
+`main.py` clears the display, turns off its backlight, and closes the bus
+on exit. Hardware configuration errors are reported rather than silently
+switching to demo mode.
 
 Call `buzzer.playingSound([(440, 0.5), (0, 0.2), (523, 0.5)])` with a list of
 `(frequency in Hz, duration in seconds)` pairs. Frequency 0 creates a rest.

@@ -20,3 +20,5 @@ DISTANCE_ECHO_PIN = 19
 LCD_SDA_PIN = 2  # SDA1, physical pin 3
 LCD_SCL_PIN = 3  # SCL1, physical pin 5
 LCD_I2C_BUS = 1
+LCD_I2C_ADDRESS = 0x27  # Address detected by the user's I2C scan.
+LCD_I2C_EXPANDER = "PCF8574"  # PCF8574T backpack confirmed by the user.

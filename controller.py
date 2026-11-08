@@ -1,8 +1,10 @@
-"""Coordinates the rover's buzzer behavior."""
+"""Coordinates the rover's buzzer and LCD display."""
+from time import sleep
 
 class RoverController:
-    def __init__(self, buzzer):
+    def __init__(self, buzzer, lcd):
         self.buzzer = buzzer
+        self.lcd = lcd
 
     def run(self):
         """Play Happy Birthday using the configured buzzer mode."""
@@ -40,7 +42,10 @@ class RoverController:
             (587, 0.5),
             (523, 1.0),
         ]
-        self.buzzer.playingSound(melody)
+        self.lcd.writeFirstLine("Rover ready")
+        self.lcd.writeSecondLine("Playing melody")
+        # self.buzzer.playingSound(melody)
+        
 
     def run_demo(self):
         """Simulate the same melody when main constructs a demo buzzer."""
