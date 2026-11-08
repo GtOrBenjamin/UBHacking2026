@@ -5,12 +5,6 @@ from config import LCD_I2C_ADDRESS, LCD_I2C_BUS, LCD_I2C_EXPANDER
 
 
 class lcdDisplay:
-    """Replace or clear individual 16-character rows without touching the other.
-
-    Text longer than 16 characters is truncated. Shorter text is padded with
-    spaces to erase the previous contents. Only printable ASCII is accepted
-    so control characters cannot move the cursor onto another row.
-    """
 
     def __init__(self, *, demo=True, address=LCD_I2C_ADDRESS,
                  expander=LCD_I2C_EXPANDER, bus=LCD_I2C_BUS):
@@ -20,11 +14,6 @@ class lcdDisplay:
         if demo:
             print(f"[DEMO LCD] initialize 16x2 on I2C bus {bus}; backlight on")
         else:
-            if (isinstance(address, bool) or not isinstance(address, int)
-                    or not 0x08 <= address <= 0x77):
-                raise ValueError("Set LCD_I2C_ADDRESS in config.py to your LCD's I2C address.")
-            if expander not in ("PCF8574", "MCP23008"):
-                raise ValueError("Set LCD_I2C_EXPANDER to PCF8574 or MCP23008 in config.py.")
             from RPLCD.i2c import CharLCD
 
             self._device = CharLCD(

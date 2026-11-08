@@ -20,6 +20,7 @@ class Buzzer:
             from gpiozero import PWMOutputDevice
 
             self._device = PWMOutputDevice(pin, initial_value=0, frequency=440)
+            print(f"[HARDWARE buzzer] initialized on BCM GPIO {pin}", flush=True)
 
     def tone(self, frequency):
         """Start a continuous tone; caller controls when to stop it."""
@@ -32,6 +33,7 @@ class Buzzer:
             self._device.value = 0
             self._device.frequency = frequency
             self._device.value = 0.5
+            print(f"[HARDWARE buzzer] tone {frequency} Hz, duty cycle 50%", flush=True)
         self.frequency = frequency
 
     def playingSound(self, notes):
@@ -95,8 +97,12 @@ class Buzzer:
                     continue
                 if frequency == 0:
                     self.off()
+                    if not self.demo:
+                        print(f"[HARDWARE buzzer] rest for {duration} seconds", flush=True)
                 else:
                     self.tone(frequency)
+                    if not self.demo:
+                        print(f"[HARDWARE buzzer] playing for {duration} seconds", flush=True)
                 sleep(duration)
                 self.off()
         finally:
@@ -108,6 +114,8 @@ class Buzzer:
         self.frequency = None
         if self.demo:
             print("[DEMO buzzer] off")
+        elif self._device is not None:
+            print("[HARDWARE buzzer] off", flush=True)
 
     def close(self):
         try:
@@ -116,3 +124,5 @@ class Buzzer:
             if self._device is not None:
                 self._device.close()
                 self._device = None
+                if not self.demo:
+                    print("[HARDWARE buzzer] closed; GPIO released", flush=True)
