@@ -1,25 +1,8 @@
-"""Coordinates the rover's buzzer and movement commands."""
-from time import sleep;
+"""Coordinates the rover's buzzer behavior."""
 
 class RoverController:
-    def __init__(self, buzzer, motors):
+    def __init__(self, buzzer):
         self.buzzer = buzzer
-        self.motors = motors
-
-    def moveForward(self, speed):
-        self.motors.moveForward(speed)
-
-    def moveBackward(self, speed):
-        self.motors.moveBackward(speed)
-
-    def turnRight(self, speed):
-        self.motors.turnRight(speed)
-
-    def turnLeft(self, speed):
-        self.motors.turnLeft(speed)
-
-    def stop(self):
-        self.motors.stop()
 
     def run(self):
         """Play Happy Birthday using the configured buzzer mode."""
@@ -57,13 +40,7 @@ class RoverController:
             (587, 0.5),
             (523, 1.0),
         ]
-        # self.buzzer.playingSound(melody)
-        for i in range(3):
-            self.moveForward(100);
-            sleep(1);
-            self.turnRight(100);
-            sleep(1);
-    
+        self.buzzer.playingSound(melody)
 
     def run_demo(self):
         """Simulate the same melody when main constructs a demo buzzer."""

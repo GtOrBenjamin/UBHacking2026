@@ -6,7 +6,6 @@ from contextlib import ExitStack
 
 from buzzer import Buzzer
 from controller import RoverController
-from motor_driver import MotorDriver
 
 
 def main():
@@ -22,13 +21,10 @@ def main():
     demo = args.demo
 
     with ExitStack() as cleanup:
-        motors = MotorDriver(demo=demo)
-        cleanup.callback(motors.close)
-
         buzzer = Buzzer(demo=demo)
         cleanup.callback(buzzer.close)
 
-        controller = RoverController(buzzer, motors)
+        controller = RoverController(buzzer)
 
         try:
             if demo:

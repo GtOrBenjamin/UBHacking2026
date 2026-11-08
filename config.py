@@ -11,3 +11,12 @@ MOTOR_IN3 = 22
 MOTOR_IN4 = 23
 MOTOR_ENA = 18
 MOTOR_ENB = 13
+
+# Distance sensor connections from Description.txt (BCM numbering).
+DISTANCE_TRIGGER_PIN = 26
+DISTANCE_ECHO_PIN = 19
+
+# LCD1602 on I2C bus 1. Pins are managed by the I2C interface.
+LCD_SDA_PIN = 2  # SDA1, physical pin 3
+LCD_SCL_PIN = 3  # SCL1, physical pin 5
+LCD_I2C_BUS = 1

@@ -1,48 +1,56 @@
-MÔ TẢ CẤU TẠO ROVER
+﻿ROVER HARDWARE DESCRIPTION
 
-
-
-1. Bộ điều khiển trung tâm
+1. Central controller
 - Raspberry Pi 4.
-- Số GPIO trong code và tài liệu là BCM, không phải số chân vật lý.
+- GPIO numbers in the code and documentation use BCM numbering, not physical
+  pin numbers.
 
-2. Hệ thống di chuyển
-- Rover có 4 bánh xe.
-- Module L298N gồm 2 kênh điều khiển bên trái và bên phải.
-- IN1/IN2 điều khiển chiều quay bên trái; IN3/IN4 điều khiển bên phải.
-- Theo mô tả được cung cấp: IN1 chiều xuôi, IN2 chiều ngược bên trái;
-  IN3 chiều xuôi, IN4 chiều ngược bên phải.
-- Mức logic được mô tả: HIGH 3,3 V, LOW 0 V.
-- ENA và ENB vẫn được sử dụng để điều chỉnh tốc độ bằng PWM từ Pi.
-- Có 4 motor tổng cộng: 2 motor bên trái và 2 motor bên phải.
-- Kênh A của L298N (IN1/IN2, ENA) điều khiển chung 2 motor bên trái.
-- Kênh B của L298N (IN3/IN4, ENB) điều khiển chung 2 motor bên phải.
-- Hai motor cùng bên nhận chung lệnh chiều quay và PWM; phần mềm không
-  điều khiển riêng từng motor trong cùng một bên.
+2. Movement system
+- The rover has 4 wheels.
+- The L298N module has 2 channels controlling the left and right sides.
+- IN1/IN2 control the left-side direction; IN3/IN4 control the right-side
+  direction.
+- According to the supplied description, IN1 is left forward and IN2 is
+  left backward; IN3 is right forward and IN4 is right backward.
+- The specified logic levels are HIGH = 3.3 V and LOW = 0 V.
+- ENA and ENB are used for PWM speed control from the Raspberry Pi.
+- There are 4 motors in total: 2 on the left and 2 on the right.
+- L298N channel A (IN1/IN2, ENA) controls both left motors together.
+- L298N channel B (IN3/IN4, ENB) controls both right motors together.
+- Both motors on each side share direction and PWM commands. The software
+  does not control individual motors on the same side independently.
 
-Kết nối Pi -> L298N đã được người dùng xác nhận:
-  L298N   GPIO BCM   Chân vật lý Pi   Vai trò
-  IN1     17         11               Chiều quay bên trái
-  IN2     27         13               Chiều quay bên trái
-  IN3     22         15               Chiều quay bên phải
-  IN4     23         16               Chiều quay bên phải
-  ENA     18         12               PWM bên trái
-  ENB     13         33               PWM bên phải
+Pi -> L298N connections confirmed by the user:
+  L298N   BCM GPIO   Physical Pi pin   Role
+  IN1     17         11                Left-side direction
+  IN2     27         13                Left-side direction
+  IN3     22         15                Right-side direction
+  IN4     23         16                Right-side direction
+  ENA     18         12                Left-side PWM
+  ENB     13         33                Right-side PWM
 
-Yêu cầu đấu nối theo cấu hình code:
-- Tháo jumper ENA/ENB khi điều khiển hai chân này bằng GPIO.
-- Nối chung GND Raspberry Pi và GND L298N.
-- Chưa xác nhận thực tế đã thực hiện các yêu cầu đấu nối trên.
-- Chiều tiến thực tế phụ thuộc cách đấu dây/lắp motor; chưa chạy kiểm chứng.
+Wiring requirements for the code configuration:
+- Remove the ENA/ENB jumpers when controlling these pins through GPIO.
+- Connect the Raspberry Pi GND and L298N GND to a common ground.
+- Whether these wiring requirements have actually been completed has not
+  been confirmed.
+- Actual forward movement depends on motor wiring and mounting; it has not
+  been verified through testing.
 
-4. Buzzer piezo
-- Người dùng xác nhận điều khiển bằng PWM.
-- Chưa xác nhận GPIO BCM, model, điện áp/dòng định mức và mạch đấu nối.
-GPIO12
-- Chưa xác định thời điểm kêu, tần số âm hoặc mẫu tiếng báo.
-- Chưa tích hợp buzzer vào code hiện tại.
+3. Piezo buzzer
+- The user confirmed PWM control.
+- The original description states that the BCM GPIO, model, rated voltage
+  and current, and wiring circuit have not been confirmed.
+- GPIO12 is also listed in the original description.
+- When the buzzer should sound, its tone frequency, and its alert pattern
+  have not been defined.
+- The original description states that the buzzer has not yet been
+  integrated into the code.
 
-5. Màn hình LCD
-- Mô tả ban đầu ghi các trạng thái: Detected / Clean / Moving.
-- LCD 1602, Hãy để PIN là một placeholder (khác với những pin đã được sử dụng)
+4. LCD display
+- The initial description lists these statuses: Detected / Clean / Moving.
+- LCD I2C 1602. Leave the pin assignment as a placeholder, separate from pins
+  already in use.
 
+5. Distant Sensor 
+- PIN: GPIO26 - Trigger, GPIO19 - Echo
