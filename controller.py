@@ -1,11 +1,28 @@
 """Coordinates the rover's distance sensor, buzzer, and LCD display."""
 from distantsensor import distantSensor
+import curses
 
 class RoverController:
-    def __init__(self, buzzer, lcd, *, demo=True):
+    def __init__(self, buzzer, lcd, motors, *, demo=True):
         self.buzzer = buzzer
         self.lcd = lcd
+        self.motors = motors
         self.distance_sensor = distantSensor(demo=demo)
+
+    def moveForward(self, speed):
+        self.motors.moveForward(speed)
+
+    def moveBackward(self, speed):
+        self.motors.moveBackward(speed)
+
+    def turnRight(self, speed):
+        self.motors.turnRight(speed)
+
+    def turnLeft(self, speed):
+        self.motors.turnLeft(speed)
+
+    def stop(self):
+        self.motors.stop()
 
     def runDistance(self):
         """Print sensor readings every 0.5 seconds until interrupted."""
@@ -15,7 +32,11 @@ class RoverController:
         """Continuously show distance readings in the configured mode."""
         self.lcd.writeFirstLine("Rover ready")
         self.lcd.writeSecondLine("Reading distance")
-        self.runDistance()
+        try:
+            curses.wrapper(self.WASD)
+        finally:
+            self.stop()
+
 
     def close(self):
         """Release the sensor owned by this controller."""
@@ -48,3 +69,28 @@ class RoverController:
     def run_demo(self):
         """Run distance reporting using the demo sensor."""
         self.run()
+
+    def WASD(self, stdscr):
+        stdscr.keypad(True)
+        stdscr.timeout(100)
+
+        while True:
+            key = stdscr.getch()
+
+            if key == ord('w'):
+                self.moveForward(100);
+            elif key == ord('s'):
+                self.moveBackward(100);
+            elif key == ord('a'):
+                self.turnLeft(100);
+            elif key == ord('d'):
+                self.turnRight(100);
+            elif key == curses.KEY_UP:
+                self.moveForward(100);
+            elif key == ord('q'):
+                break
+            else:
+                continue
+
+            stdscr.erase()
+            stdscr.refresh()

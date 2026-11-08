@@ -7,6 +7,7 @@ from contextlib import ExitStack
 from buzzer import Buzzer
 from controller import RoverController
 from lcddisplay import lcdDisplay
+from motor_driver import MotorDriver
 
 
 def main():
@@ -22,13 +23,16 @@ def main():
     demo = args.demo
 
     with ExitStack() as cleanup:
+        motors = MotorDriver(demo=demo)
+        cleanup.callback(motors.close)
+
         lcd = lcdDisplay(demo=demo)
         cleanup.callback(lcd.close)
 
         buzzer = Buzzer(demo=demo)
         cleanup.callback(buzzer.close)
 
-        controller = RoverController(buzzer, lcd, demo=demo)
+        controller = RoverController(buzzer, lcd, motors, demo=demo)
         cleanup.callback(controller.close)
 
         try:
