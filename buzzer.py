@@ -77,7 +77,7 @@ class Buzzer:
         ]
 
         try:
-            melody = HPBD
+            melody = []
             for note in notes:
                 if not isinstance(note, (tuple, list)) or len(note) != 2:
                     raise ValueError("Each note must be a (frequency, duration) pair.")
